@@ -7,4 +7,4 @@ This is a 'simple' way of doing these conversions that isn't elegant, but works 
 It can also be used for converting other image types to SVG suitable for use in LightBurn, but is limited to monochome images.
 
 To setup environment:
-apt install cairosvg imagemagick 
+apt install cairosvg imagemagick potrace
