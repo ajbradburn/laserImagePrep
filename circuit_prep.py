@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(description="Process an SVG file for use in Lig
 # Add the arguments.
 parser.add_argument("path", type=str, help="The path to the KiCad project files.")
 parser.add_argument("--invert", action="store_true", help="Do you want to invert the colors (black and white) of the svg?")
+parser.add_argument("--mirror", action="store_true", help="Do you want to flip this image horizontally? (Normally useful for the back layers of a PCB.)")
 
 # Parse the arguments.
 args = parser.parse_args()
@@ -19,6 +20,7 @@ args = parser.parse_args()
 # Access the arguments.
 path = args.path
 invert = args.invert
+mirror = args.mirror
 
 # Prepare the filenames that will be used in the process.
 filepath = os.path.split(path)[0]
@@ -34,6 +36,7 @@ if invert:
 # Process the files.
 print("Processing file {}.".format(path))
 print("Invert option for file is: {}".format(invert))
+print("Mirror option for file is: {}".format(mirror))
 
 shutil.copy("{}/{}.svg".format(filepath, filename), svg_original)
 
@@ -48,10 +51,16 @@ os.system("cairosvg {} -d 2400 -b white -o {}".format(os_escape(svg_original), o
 if invert:
   os.system("convert {} -channel rgb -negate {}".format(os_escape(png_normal), os_escape(png_inverted)))
   os.system("rm {}".format(os_escape(png_normal)))
-  os.system("convert {} {}".format(os_escape(png_inverted), os_escape(pnm_intermediate)))
+  if mirror:
+    os.system("convert {} -flop {}".format(os_escape(png_inverted), os_escape(pnm_intermediate)))
+  else:
+    os.system("convert {} {}".format(os_escape(png_inverted), os_escape(pnm_intermediate)))
   os.system("rm {}".format(os_escape(png_inverted)))
 else:
-  os.system("convert {} {}".format(os_escape(png_normal), os_escape(pnm_intermediate)))
+  if mirror:
+    os.system("convert {} -flop {}".format(os_escape(png_normal), os_escape(pnm_intermediate)))
+  else:
+    os.system("convert {} {}".format(os_escape(png_normal), os_escape(pnm_intermediate)))
   os.system("rm {}".format(os_escape(png_normal)))
 
 os.system("potrace {} -W {} -H {} -s -o {}".format(os_escape(pnm_intermediate), width, height, os_escape(svg_new)))

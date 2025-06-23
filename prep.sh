@@ -15,7 +15,7 @@ if [ -e "$1-F_Cu.svg" ]; then
 fi
 
 if [ -e "$1-B_Cu.svg" ]; then
-  python3 circuit_prep.py "$1-B_Cu.svg" --invert
+  python3 circuit_prep.py "$1-B_Cu.svg" --invert --mirror
 fi
 
 if [ -e "$1-F_Mask.svg" ]; then
@@ -23,7 +23,7 @@ if [ -e "$1-F_Mask.svg" ]; then
 fi
 
 if [ -e "$1-B_Mask.svg" ]; then
-  python3 circuit_prep.py "$1-B_Mask.svg"
+  python3 circuit_prep.py "$1-B_Mask.svg" --mirror
 fi
 
 if [ -e "$1-F_Paste.svg" ]; then
@@ -31,5 +31,5 @@ if [ -e "$1-F_Paste.svg" ]; then
 fi
 
 if [ -e "$1-B_Paste.svg" ]; then
-  python3 circuit_prep.py "$1-B_Paste.svg"
+  python3 circuit_prep.py "$1-B_Paste.svg" --mirror
 fi
